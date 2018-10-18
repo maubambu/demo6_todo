@@ -5,48 +5,31 @@ import Title from './Title/Title';
 import TodoList from './TodoList/TodoList';
 import Footer from './Footer/Footer';
 
-export default class Todos extends Component{
+
+import { connect } from 'react-redux';
+
+class Todos extends Component{
     constructor() {
         super();
-        this.state = {
-            list: [
-                {
-                    id: 1,
-                    text: "Comprar manteconchas",
-                    done: false
-                },
-                {
-                    id: 2,
-                    text: "Ir al gym",
-                    done: false
-                }
-            ],
-            todoInput: "",
-            selectedFilter: "all"
-        }
     }
 
     handleInputChange = (e) => {
-        this.setState({ todoInput: e.target.value });
+        this.props.dispatch({type: "UPDATE_TODO_INPUT", input: e.target.value})
     }
 
     handleAddTodo = () => {
-        this.setState({
-            list: this.state.list.concat(
-                {
-                    id: this.state.list.length + 1,
-                    text: this.state.todoInput,
-                    done: false
-                }
-            ),
-            todoInput: ""
-        });
+        let newTodo = {
+            id: this.props.list.length + 1,
+            text: this.props.todoInput,
+            done: false
+        }
+        this.props.dispatch({type: "ADD_TODO", todo: newTodo})
     }
 
     handleDoneChange = (e, id) => {
         const arregloTemporal = this.state.list;
         for (let i in arregloTemporal) {
-            if (arregloTemporal[i].id == id) {
+            if (arregloTemporal[i].id === id) {
                 arregloTemporal[i].done = e.target.checked;
             }
         }
@@ -86,17 +69,26 @@ export default class Todos extends Component{
                                 keyboard_arrow_down
                             </Icon>
                         </IconButton>
-                        <InputBase value={this.state.todoInput} onChange={(e)=>this.handleInputChange(e)} placeholder="Escribe una tarea" className="input" type="text" />
+                        <InputBase value={this.props.todoInput} onChange={(e)=>this.handleInputChange(e)} placeholder="Escribe una tarea" className="input" type="text" />
                         <IconButton onClick={this.handleAddTodo}>
                             <Icon>
                                 add
                             </Icon>
                         </IconButton>
                     </div>
-                    <TodoList change={this.handleDoneChange} list={filteredList} />
+                    <TodoList change={this.handleDoneChange} list={this.props.list} />
                     <Footer filterChange={this.handleFilterChange} missing={faltan}/>
                 </Card>
             </div>
         )
     }
 }
+
+function mapStateToProps(state)  {
+    console.log(state.todoReducer)
+    return {
+        ...state.todoReducer
+    }
+}
+
+export default connect(mapStateToProps)(Todos);
