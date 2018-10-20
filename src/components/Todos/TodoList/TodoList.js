@@ -4,11 +4,6 @@ import { connect } from 'react-redux';
 
 class TodoList extends Component {
 
-    state = {
-        list: this.props.list
-    }
-
-
     handleDoneChange = (e, id) => {
         this.props.dispatch({ type: "CHECK_TODO", id: id, checked: e.target.checked });
     }
