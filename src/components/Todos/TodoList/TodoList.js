@@ -30,6 +30,4 @@ const mapStateToProps = (state) => {
         list: state.todosReducer.list
     }
 }
-
-
 export default connect(mapStateToProps)(TodoList);

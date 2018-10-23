@@ -17,19 +17,18 @@ export const TodosReducer = (state = initialState, action) => {
                 list: state.list.concat(newTodo)
             }
         case CHECK_TODO:
-            let arregloTemporal = state.list;
+            let arregloTemporal = state.list.slice();
             for (let item of arregloTemporal) {
-                if (item.id == action.id) {
+                if (item.id === action.id) {
                     item.done = action.checked;
                 }
             }
-
             return {
                 ...state,
                 list: arregloTemporal
             }
         case REMOVE_TODO:
-            
+            break;
         
         default:
             return state;
