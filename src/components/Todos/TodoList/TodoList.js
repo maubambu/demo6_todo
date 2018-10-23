@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
 import { connect } from 'react-redux';
+import { CheckTodo } from './../../../state/actions/TodosActions';
 
 class TodoList extends Component {
 
     handleDoneChange = (e, id) => {
-        this.props.dispatch({ type: "CHECK_TODO", id: id, checked: e.target.checked });
+        this.props.checkTodo(id, e.target.checked);
     }
 
     render() {
@@ -27,7 +28,12 @@ class TodoList extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        list: state.todosReducer.list
+        list: state.todos.list
     }
 }
-export default connect(mapStateToProps)(TodoList);
+
+const mapDispatchToProps = {
+    checkTodo: CheckTodo
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);

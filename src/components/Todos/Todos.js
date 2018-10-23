@@ -5,6 +5,7 @@ import Title from './Title/Title';
 import TodoList from './TodoList/TodoList';
 import Footer from './Footer/Footer';
 import { connect } from 'react-redux';
+import { AddTodo } from './../../state/actions/TodosActions';
 
 class Todos extends Component{
 
@@ -18,7 +19,7 @@ class Todos extends Component{
     }
 
     handleAddTodo = () => {
-        this.props.dispatch({ type: "ADD_TODO", text: this.state.todoInput });
+        this.props.addTodo(this.state.todoInput);
     }
 
 
@@ -70,8 +71,12 @@ class Todos extends Component{
 
 const mapStateToProps = (state) => {
     return {
-        ...state.todosReducer
+        ...state.todos
     }
 }
 
-export default connect(mapStateToProps)(Todos);
+const mapDispatchToProps = {
+    addTodo: AddTodo
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Todos);

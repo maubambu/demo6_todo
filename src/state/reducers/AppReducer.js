@@ -5,6 +5,6 @@ import { FilterReducer } from './FilterReducer';
 
 
 export const AppReducer = combineReducers({
-    todosReducer: TodosReducer,
-    filterReducer: FilterReducer
+    todos: TodosReducer,
+    filter: FilterReducer
 });
