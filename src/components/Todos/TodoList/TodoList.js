@@ -10,7 +10,21 @@ class TodoList extends Component {
     }
 
     render() {
-        const list = this.props.list.map(item => {
+        let filteredList = this.props.list.slice();
+        switch (this.props.selectedFilter) {
+            case "done":
+                // Filtrado de done
+                filteredList = this.props.list.filter(item => item.done)
+                break;
+            case "pending":
+                // Filtrado de los que no esten finalizados
+                filteredList = this.props.list.filter(item => !item.done)
+                break;
+            default:
+                // Filtrado == copia de todos
+                filteredList = this.props.list;
+        }
+        const list = filteredList.map(item => {
             return (
                 <li key={item.id}>
                     <Checkbox onChange={(e) => this.handleDoneChange(e, item.id)} checked={item.done}></Checkbox>
@@ -28,7 +42,8 @@ class TodoList extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        list: state.todos.list
+        list: state.todos.list,
+        selectedFilter: state.filter.selectedFilter
     }
 }
 

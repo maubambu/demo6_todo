@@ -6,11 +6,11 @@ import TodoList from './TodoList/TodoList';
 import Footer from './Footer/Footer';
 import { connect } from 'react-redux';
 import { AddTodo } from './../../state/actions/TodosActions';
+import { SelectFilter } from './../../state/actions/FilterActions';
 
 class Todos extends Component{
 
     state = {
-        selectedFilter: "",
         todoInput: ""
     }
 
@@ -22,27 +22,8 @@ class Todos extends Component{
         this.props.addTodo(this.state.todoInput);
     }
 
-
-    handleFilterChange = (filter) => {
-        this.setState({ selectedFilter: filter });
-    }
-
     render() {
         let faltan = this.props.list.filter(item => !item.done).length;
-        let filteredList = [];
-        switch (this.state.selectedFilter) {
-            case "done":
-                // Filtrado de done
-                filteredList = this.props.list.filter(item => item.done)
-                break;
-            case "pending":
-                // Filtrado de los que no esten finalizados
-                filteredList = this.props.list.filter(item => !item.done)
-                break;
-            default:
-                // Filtrado == copia de todos
-                filteredList = this.props.list;
-        }
 
         return (
             <div className="todos-container">
@@ -61,8 +42,8 @@ class Todos extends Component{
                             </Icon>
                         </IconButton>
                     </div>
-                    <TodoList change={this.handleDoneChange} />
-                    <Footer filterChange={this.handleFilterChange} missing={faltan}/>
+                    <TodoList/>
+                    <Footer missing={faltan}/>
                 </Card>
             </div>
         )
@@ -71,12 +52,13 @@ class Todos extends Component{
 
 const mapStateToProps = (state) => {
     return {
-        ...state.todos
+        ...state.todos,
     }
 }
 
 const mapDispatchToProps = {
-    addTodo: AddTodo
+    addTodo: AddTodo,
+    selectFilter: SelectFilter
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Todos);

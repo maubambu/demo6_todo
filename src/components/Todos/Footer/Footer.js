@@ -1,18 +1,33 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Button from '@material-ui/core/Button';
 import './Footer.scss';
+import { connect } from 'react-redux';
+import { SelectFilter } from '../../../state/actions/FilterActions';
 
-const Footer = (props) => {
-    return (
-        <div className="footer-container">
-            <p>Faltan {props.missing} tareas</p>
-            <div>
-                <Button onClick={() => props.filterChange("all")} variant="outlined">Todos</Button>
-                <Button onClick={() => props.filterChange("done")} variant="outlined">Completados</Button>
-                <Button onClick={() => props.filterChange("pending")} variant="outlined">Pendientes</Button>
+class Footer extends Component {
+
+    handleFilterChange = (filter)=> {
+        this.props.selectFilter(filter);
+    }
+
+    render() {
+        return (
+            <div className="footer-container">
+                <p>Faltan {this.props.missing} tareas</p>
+                <div>
+                    <Button onClick={()=>this.handleFilterChange("all")} variant="outlined">Todos</Button>
+                    <Button onClick={()=>this.handleFilterChange("done")} variant="outlined">Completados</Button>
+                    <Button onClick={()=>this.handleFilterChange("pending")} variant="outlined">Pendientes</Button>
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
-export default Footer;
+
+
+const mapDispatchToProps = {
+    selectFilter: SelectFilter
+}
+
+export default connect(null, mapDispatchToProps)(Footer);
