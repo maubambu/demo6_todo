@@ -22,14 +22,6 @@ const CheckTodo = (id, checked)=> ({
 })
 
 
-// const FetchStarwars = () => {
-//     const request = axios.get("https://swapi.co/api/people");
-//     return async dispatch => {
-//         await request;
-//         return dispatch({type: "FETCH_STARWARS"})
-//     }
-// }
-
 
 // EXPORT ACTIONS
 
