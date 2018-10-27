@@ -4,26 +4,12 @@ import './Todos.scss';
 import Title from './Title/Title';
 import TodoList from './TodoList/TodoList';
 import Footer from './Footer/Footer';
+import { connect } from 'react-redux';
+import { addTodo, toggleTodo } from './../../state/actions/TodosActions';
 
-export default class Todos extends Component{
-    constructor() {
-        super();
-        this.state = {
-            list: [
-                {
-                    id: 1,
-                    text: "Comprar manteconchas",
-                    done: false
-                },
-                {
-                    id: 2,
-                    text: "Ir al gym",
-                    done: false
-                }
-            ],
-            todoInput: "",
-            selectedFilter: "all"
-        }
+class Todos extends Component{
+    state = {
+        todoInput: ""
     }
 
     handleInputChange = (e) => {
@@ -31,51 +17,12 @@ export default class Todos extends Component{
     }
 
     handleAddTodo = () => {
-        this.setState({
-            list: this.state.list.concat(
-                {
-                    id: this.state.list.length + 1,
-                    text: this.state.todoInput,
-                    done: false
-                }
-            ),
-            todoInput: ""
-        });
-    }
-
-    handleDoneChange = (e, id) => {
-        const arregloTemporal = this.state.list;
-        for (let i in arregloTemporal) {
-            if (arregloTemporal[i].id == id) {
-                arregloTemporal[i].done = e.target.checked;
-            }
-        }
-        this.setState({ list: arregloTemporal });
-    }
-
-    handleFilterChange = (filter) => {
-        this.setState({ selectedFilter: filter });
+        this.props.addTodo(this.state.todoInput);
+        this.setState({ todoInput: "" });
     }
 
     render() {
-        let faltan = this.state.list.filter(item => !item.done).length;
-        let filteredList = [];
-        switch (this.state.selectedFilter) {
-            case "done":
-                // Filtrado de done
-                filteredList = this.state.list.filter(item => item.done)
-                break;
-            case "pending":
-                // Filtrado de los que no esten finalizados
-                filteredList = this.state.list.filter(item => !item.done)
-                break;
-            default:
-                // Filtrado == copia de todos
-                filteredList = this.state.list;
-        }
-
-
-
+        let faltan = this.props.list.filter(item => !item.done).length;
         return (
             <div className="todos-container">
                 <Title text="Tareas"/>
@@ -93,10 +40,24 @@ export default class Todos extends Component{
                             </Icon>
                         </IconButton>
                     </div>
-                    <TodoList change={this.handleDoneChange} list={filteredList} />
-                    <Footer filterChange={this.handleFilterChange} missing={faltan}/>
+                    <TodoList />
+                    <Footer missing={faltan}/>
                 </Card>
             </div>
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        list: state.todos.list,
+        selectedFilter: state.filter.selectedFilter
+    }
+}
+
+const mapDispatchToProps = {
+    addTodo, toggleTodo
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Todos);
